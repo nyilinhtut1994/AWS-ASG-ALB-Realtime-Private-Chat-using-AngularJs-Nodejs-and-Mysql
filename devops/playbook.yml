@@ -52,18 +52,6 @@
         sudo apt-get install -f
       become: true
     
-    - name: install docker
-      apt: 
-        name: docker.io
-        state: latest
-      become: true
-
-    - name: login to the Docker Hub with dockerhub_token
-      docker_login:
-        username: "{{ DOCKERHUB_USERNAME }}"
-        password: "{{ DOCKERHUB_TOKEN }}"
-      become: true
-    
     - name: pull the image
       docker_image:
         name: "{{ IMAGE_NAME }}"
