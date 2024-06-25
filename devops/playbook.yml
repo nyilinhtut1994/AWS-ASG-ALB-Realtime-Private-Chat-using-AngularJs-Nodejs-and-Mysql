@@ -5,7 +5,7 @@
   hosts: localhost
   vars:
     region: "ap-southeast-1"
-    asg_name: "asg-p2-nodejs" 
+    asg_name: "p2-nodejs" 
     IMAGE_NAME: "{{ image_name}}"
     DOCKERHUB_USERNAME: "{{ dockerhub_username }}"
     DOCKERHUB_TOKEN: "{{ dockerhub_token }}"
@@ -19,7 +19,6 @@
         region: "{{ region }}"
         filters:
           "tag:aws:autoscaling:groupName": "{{ asg_name }}"
-          "tag:Project": "zomato"
           instance-state-name: [ "running" ]
       register: instance_details
  
