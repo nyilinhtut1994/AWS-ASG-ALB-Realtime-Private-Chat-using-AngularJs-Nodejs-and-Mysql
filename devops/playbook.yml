@@ -1,7 +1,7 @@
 ---
  
 - name: "fetching instance details"
-  become: false
+  become: true
   hosts: localhost
   vars:
     region: "ap-southeast-1"
