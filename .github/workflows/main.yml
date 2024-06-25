@@ -73,7 +73,7 @@ jobs:
 
             - name: Deploy with ansible
               run: |
-                ansible-playbook \
+                sudo ansible-playbook \
                 --extra-vars "image_name=$IMAGE_NAME:latest" \
                 --extra-vars "domain_name=$DOMAIN_NAME" \
                 --extra-vars "container_name=$CONTAINER_NAME" \
