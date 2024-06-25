@@ -79,4 +79,5 @@ jobs:
                 --extra-vars "dockerhub_token=$DOCKERHUB_TOKEN" \
                 --extra-vars "ssh_private_key=$SSH_PRIVATE_KEY" \
                 --extra-vars "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" \
+                --extra-vars "ansible_python_interpreter=/usr/bin/python3" \
                 devops/playbook.yml
