@@ -11,13 +11,15 @@
     DOCKERHUB_TOKEN: "{{ dockerhub_token }}"
     DOMAIN_NAME: "{{ domain_name }}"
     SSH_PRIVATE_KEY: "{{ ssh_private_key }}"
-    CONTAINER_NAME: "{{ container_name }}"         #name of autoscaling group
+    CONTAINER_NAME: "{{ container_name }}" 
+    AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}" 
+    AWS_ACCESS_KEY: "{{ aws_access_key }}"       #name of autoscaling group
   tasks:
 
     - name: Debug Python interpreter
       debug:
         msg: "{{ ansible_playbook_python }}"
-        
+
     - name: "gathering instance details"
       amazon.aws.ec2_instance_info:
         region: "{{ region }}"
@@ -25,6 +27,8 @@
           "tag:aws:autoscaling:groupName": "{{ asg_name }}"
           instance-state-name: [ "running" ]
       register: instance_details
+      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
+      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
  
     - name: "creating dynamic inventory"
       add_host:
