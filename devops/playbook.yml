@@ -1,7 +1,7 @@
 ---
  
 - name: "fetching instance details"
-  become: true
+  become: false
   hosts: localhost
   vars:
     region: "ap-southeast-1"
@@ -49,16 +49,19 @@
       apt: 
         name: docker.io
         state: latest
+      become: true
 
     - name: login to the Docker Hub with dockerhub_token
       docker_login:
         username: "{{ DOCKERHUB_USERNAME }}"
         password: "{{ DOCKERHUB_TOKEN }}"
+      become: true
     
     - name: pull the image
       docker_image:
         name: "{{ IMAGE_NAME }}"
         source: pull
+      become: true
 
     - name: run the docker container
       docker_container:
@@ -68,6 +71,7 @@
         restart_policy: always
         ports:
           - "3000:3000"
+      become: true
 
     - name: wait for the container to start
       wait_for:
@@ -75,4 +79,5 @@
         port: 3000
         delay: 5
         timeout: 60
+      become: true
   
