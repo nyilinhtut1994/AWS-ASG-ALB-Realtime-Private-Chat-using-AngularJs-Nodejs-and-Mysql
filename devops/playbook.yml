@@ -45,6 +45,13 @@
         update_cache: yes
       become: true
     
+    - name: ensure dependencies are met
+      shell: |
+        sudo dpkg --audit
+        sudo apt-get update --fix-missing
+        sudo apt-get install -f
+      become: true
+    
     - name: install docker
       apt: 
         name: docker.io
