@@ -7,8 +7,8 @@ env:
 
   SSH_USER: ${{ vars.SSH_USER}}
   IMAGE_NAME: ${{ vars.IMAGE_NAME }}
-  DOMAIN_NAME: ${{ DOMAIN_NAME }}
-  CONTAINER_NAME: ${{ CONTAINER_NAME }}
+  DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}
+  CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
 
 
 on:
