@@ -80,3 +80,7 @@ typings/
 .env
 
 >>>>>>> 2f57339a7bda8575156e0ca997a5615a7519029f
+
+# sshkey
+nodejs
+nodejs.pub

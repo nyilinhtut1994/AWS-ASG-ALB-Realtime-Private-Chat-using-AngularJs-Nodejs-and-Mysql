@@ -14,10 +14,11 @@ class Db {
 	constructor(config) {
 		this.connection = mysql.createPool({
 			connectionLimit: 100,
-			host: '127.0.0.1',
-			user: 'root',
-			password: 'root',
-			database: 'chat',
+			host: process.env.DB_HOST,
+			user: process.env.DB_USER,
+			port: process.env.DB_PORT,
+			password: process.env.DB_PASSWORD,
+			database: process.env.DB_DATABASE,
 			debug: false
 		});
 	}

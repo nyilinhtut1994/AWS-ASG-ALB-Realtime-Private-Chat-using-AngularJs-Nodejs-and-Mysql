@@ -1,0 +1,79 @@
+---
+ 
+- name: "fetching instance details"
+  become: false
+  hosts: localhost
+  vars:
+    region: "ap-southeast-1"
+    asg_name: "asg-p2-nodejs" 
+    IMAGE_NAME: "{{ image_name}}"
+    DOCKERHUB_USERNAME: "{{ dockerhub_username }}"
+    DOCKERHUB_TOKEN: "{{ dockerhub_token }}"
+    DOMAIN_NAME: "{{ domain_name }}"
+    SSH_PRIVATE_KEY: "{{ ssh_private_key }}"
+    CONTAINER_NAME: "{{ container_name }}"         #name of autoscaling group
+  tasks:
+ 
+    - name: "gathering instance details"
+      amazon.aws.ec2_instance_info:
+        region: "{{ region }}"
+        filters:
+          "tag:aws:autoscaling:groupName": "{{ asg_name }}"
+          "tag:Project": "zomato"
+          instance-state-name: [ "running" ]
+      register: instance_details
+ 
+    - name: "creating dynamic inventory"
+      add_host:
+        groups: "asg_instances"
+        hostname: "{{ item.public_ip_address }}"
+        ansible_ssh_user: "ubuntu"
+        ansible_ssh_host: '{{ item.public_ip_address }}'
+        ansible_ssh_port: "22"
+        ansible_ssh_private_key_file: "{{ SSH_PRIVATE_KEY }}"
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      loop: "{{ instance_details.instances }}"
+
+    - name: update the server
+      apt: 
+        update_cache: yes
+    
+    - name: install docker
+      apt: 
+        name: docker.io
+        state: latest
+        notify: start the docker
+
+    - name: login to the Docker Hub with dockerhub_token
+      docker_login:
+        username: "{{ DOCKERHUB_USERNAME }}"
+        password: "{{ DOCKERHUB_TOKEN }}"
+    
+    - name: pull the image
+      docker_image:
+        name: "{{ IMAGE_NAME }}"
+        source: pull
+
+    - name: run the docker container
+      docker_container:
+        name: "{{ CONTAINER_NAME }}"
+        image: "{{ IMAGE_NAME }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"
+
+    - name: wait for the container to start
+      wait_for:
+        host: localhost
+        port: 3000
+        delay: 5
+        timeout: 60
+  
+
+  handlers:
+    - name: start the docker
+      service:
+        name: docker
+        state: started
+
