@@ -27,8 +27,7 @@
           "tag:aws:autoscaling:groupName": "{{ asg_name }}"
           instance-state-name: [ "running" ]
       register: instance_details
-      aws_access_key: "{{ AWS_ACCESS_KEY_ID }}"
-      aws_secret_key: "{{ AWS_SECRET_ACCESS_KEY }}"
+
  
     - name: "creating dynamic inventory"
       add_host:
